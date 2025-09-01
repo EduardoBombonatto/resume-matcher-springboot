@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:12
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: resume-matcher
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    stdin_open: true
+    networks:
+      - network
+
+  resume-matcher:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
