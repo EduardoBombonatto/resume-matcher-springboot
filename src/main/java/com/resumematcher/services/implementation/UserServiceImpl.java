@@ -2,6 +2,7 @@ package com.resumematcher.services.implementation;
 
 import com.resumematcher.dtos.requests.UserRequestDTO;
 import com.resumematcher.dtos.responses.UserResponseDTO;
+import com.resumematcher.exceptions.UserEmailExistsException;
 import com.resumematcher.models.User;
 import com.resumematcher.repositories.UserRepository;
 import com.resumematcher.services.interfaces.UserService;
@@ -19,6 +20,11 @@ public abstract class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO createUser(UserRequestDTO userDto){
         User user = this.userDTOToEntity(userDto);
+
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new UserEmailExistsException();
+        }
+
         return this.userEntityToDTO(userRepository.save(user));
     }
 
