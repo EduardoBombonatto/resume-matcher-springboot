@@ -4,5 +4,5 @@ import com.resumematcher.dtos.requests.AnalysisRequestDTO;
 import com.resumematcher.dtos.responses.AnalysisResponseDTO;
 
 public interface AnalysisService {
-    AnalysisResponseDTO analyse(AnalysisRequestDTO analysisRequestDTO);
+    AnalysisResponseDTO analyse(Long id, AnalysisRequestDTO analysisRequestDTO);
 }

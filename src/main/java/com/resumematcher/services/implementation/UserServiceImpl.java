@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO getUserById(Long id){
-        if(userRepository.existsById(id)){
+        if(!userRepository.existsById(id)){
             throw new UserNotFoundException();
         }
         return this.userEntityToDTO(userRepository.findById(id).get());
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateUser(Long id, UserRequestDTO userDto){
-        if(userRepository.existsById(id)){
+        if(!userRepository.existsById(id)){
             throw new UserNotFoundException();
         }
 
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO deleteUser(Long id){
-        if(userRepository.existsById(id)){
+        if(!userRepository.existsById(id)){
             throw new UserNotFoundException();
         }
         UserResponseDTO userResponseDTO = this.getUserById(id);
