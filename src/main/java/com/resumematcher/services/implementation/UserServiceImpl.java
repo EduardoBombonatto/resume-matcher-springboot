@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(this::userEntityToDTO).collect(Collectors.toList());
     }
 
+    @Override
     public UserResponseDTO updateUser(Long id, UserRequestDTO userDto){
         if(userRepository.existsById(id)){
             throw new UserNotFoundException();
