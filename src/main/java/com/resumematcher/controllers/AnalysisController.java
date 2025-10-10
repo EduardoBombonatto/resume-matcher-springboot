@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/analysis")
 public class AnalysisController {
@@ -21,5 +23,11 @@ public class AnalysisController {
         AnalysisResponseDTO response = analysisService.analyse(userId, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AnalysisResponseDTO>> getAllAnalysis(){
+        List<AnalysisResponseDTO> response = analysisService.getAllAnalysis();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
     private final RestTemplate restTemplate;
@@ -37,14 +41,28 @@ public class AnalysisServiceImpl implements AnalysisService {
         AnalysisResponseDTO responseFromApi = restTemplate.postForObject(apiUrl, analysisRequestDTO, AnalysisResponseDTO.class);
 
         Analysis analise = new Analysis();
+        assert responseFromApi != null;
         analise.setMatchPercentage(responseFromApi.matchPercentage());
-        analise.setJobKeywords(responseFromApi.jobKeywords());
-        analise.setResumeKeywords(responseFromApi.resumeKeywords());
-        analise.setMissingKeywords(responseFromApi.missingKeywords());
+        analise.setJobKeywords(String.join(", ", responseFromApi.jobKeywords()));
+        analise.setResumeKeywords(String.join(", ", responseFromApi.resumeKeywords()));
+        analise.setMissingKeywords(String.join(", ", responseFromApi.missingKeywords()));
         analise.setUser(user);
 
         analysisRepository.save(analise);
         return responseFromApi;
     }
 
+    @Override
+    public List<AnalysisResponseDTO> getAllAnalysis(){
+        return analysisRepository.findAll().stream().map(this::analysisEntityToDTO).collect(Collectors.toList());
+    }
+
+    private AnalysisResponseDTO analysisEntityToDTO(Analysis analysis){
+        return new AnalysisResponseDTO(
+                analysis.getMatchPercentage(),
+                Arrays.asList(analysis.getJobKeywords().split(", ")),
+                Arrays.asList(analysis.getResumeKeywords().split(", ")),
+                Arrays.asList(analysis.getMissingKeywords().split(", "))
+        );
+    }
 }

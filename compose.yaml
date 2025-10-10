@@ -11,7 +11,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     stdin_open: true
     networks:
-      - network
+      - shared-network
 
   resume-matcher:
     build:
@@ -21,10 +21,10 @@ services:
     depends_on:
       - postgres
     networks:
-      - network
+      - shared-network
 
 networks:
-  network:
+  shared-network:
     driver: bridge
 
 volumes:
